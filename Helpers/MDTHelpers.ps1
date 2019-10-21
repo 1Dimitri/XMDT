@@ -2,10 +2,10 @@
 # Encapsulates an MDT Drive as an object with methods
 class XMDTPSDrive {
      
+    [System.Management.Automation.PSDriveInfo] $_drive
 
-    XMDTPSDrive([System.Management.Automation.PSDriveInfo] $Drive) 
-    {
-          $this.Drive = $Drive 
+    XMDTPSDrive([System.Management.Automation.PSDriveInfo] $Drive) {
+          $this._drive = $Drive 
     }
 
     
@@ -103,8 +103,12 @@ function New-XMDTShare {
 
     } until ($null -eq (Get-PSDrive -LiteralName $TryMDTDriveName -ErrorAction SilentlyContinue))
 
-    $MDTPSDrive = New-PSDrive -Name $TryMDTDriveName -PSProvider 'MDTProvider' -Path $Directory
+    $MDTPSDrive = New-PSDrive -Name $TryMDTDriveName -PSProvider 'MDTProvider' -Root $Directory
 
     [XMDTPSDrive]::new($MDTPSDrive)
 
 }
+
+Add-PSSnapin Microsoft.BDD.PSSnapin
+Remove-Item -Path 'C:\Prout002' -Force -EA SilentlyContinue
+$x = New-XMDTShare C:\Prout002
