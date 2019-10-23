@@ -19,7 +19,7 @@ $patch_extension = '.diff'
 
 $patchcmd =(Resolve-Path (Join-Path $SourceRoot $patchcmd)).Path
 
-Get-ChildItem -Path $SourceRoot  -recurse | Where-Object { $_.Extension -eq $patch_extension } | ForEach-Object {
+Get-ChildItem -Path $SourceRoot  -recurse  | Where-Object { $_.Extension -eq $patch_extension } | ForEach-Object {
      $patch_fullname = $_.FullName
      Write-Verbose "Handling patch $patch_fullname"
      $patch_extension = $_.Extension   # '.xx.yy -> .yy'
@@ -31,7 +31,7 @@ Get-ChildItem -Path $SourceRoot  -recurse | Where-Object { $_.Extension -eq $pat
      if (Test-Path $target_filename ) {
         Write-Verbose "Patching $target_filename with $patch_fullname"
         # TO DO: Define patch command
-        "$patchcmd"  "$target_filename" "$patch_fullname"
+        & $patchcmd  $target_filename $patch_fullname
      }
 
 }
