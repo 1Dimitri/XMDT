@@ -1,3 +1,4 @@
+Add-PSSnapin Microsoft.BDD.PSSnapin
 
 # Encapsulates an MDT Drive as an object with methods
 class XMDTPSDrive {
@@ -5,7 +6,7 @@ class XMDTPSDrive {
     [System.Management.Automation.PSDriveInfo] $_drive
 
     XMDTPSDrive([System.Management.Automation.PSDriveInfo] $Drive) {
-          $this._drive = $Drive 
+        $this._drive = $Drive 
     }
 
     
@@ -41,9 +42,15 @@ class XMDTPSDrive {
 
     # Returns the first specialized folder of a given type
     FindFolderTypeFirst([string]$FolderType) {
-        Get-ChildItem -Path $this.Drive | Where-Object { $_.NodeType -eq $FolderType} | Select-Object -First 1
+        Get-ChildItem -Path $this._drive | Where-Object { $_.NodeType -eq $FolderType } | Select-Object -First 1
     }
 
+    [void] RunScriptOnHierarchy([string] $Path) {
+        if (Test-Path $path) {
+            Write-Verbose "Running $path command"
+             & $path -TargetRootFolder $this._drive.Root
+        } 
+    }
 }
 
 function New-DirectoryIfNotExists {
@@ -109,6 +116,4 @@ function New-XMDTShare {
 
 }
 
-Add-PSSnapin Microsoft.BDD.PSSnapin
-Remove-Item -Path 'C:\Prout002' -Force -EA SilentlyContinue
-$x = New-XMDTShare C:\Prout002
+
