@@ -42,7 +42,8 @@ class XMDTPSDrive {
 
     # Returns the first specialized folder of a given type
     FindFolderTypeFirst([string]$FolderType) {
-        Get-ChildItem -Path $this._drive | Where-Object { $_.NodeType -eq $FolderType } | Select-Object -First 1
+        
+        Get-ChildItem -Path "$($this._drive):" | Where-Object { $_.NodeType -eq $FolderType } | Select-Object -First 1
     }
 
     [void] RunScriptOnHierarchy([string] $Path) {
