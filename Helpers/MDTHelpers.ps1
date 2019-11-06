@@ -9,6 +9,22 @@ class XMDTPSDrive {
         $this._drive = $Drive 
     }
 
+    # Implemeting getter/setter is overkill
+    [string] GetPSPath() {
+        return "$($this._drive):"
+
+    }
+
+    [string] GetName() {
+        return "$($this._drive.Name)"
+
+    }
+
+    [string] GetFileSystemPath() {
+        return "$($this._drive.Root)"
+
+    }
+
     
 
     # Add an OS to the drive
@@ -43,7 +59,7 @@ class XMDTPSDrive {
     # Returns the first specialized folder of a given type
     FindFolderTypeFirst([string]$FolderType) {
         
-        Get-ChildItem -Path "$($this._drive):" | Where-Object { $_.NodeType -eq $FolderType } | Select-Object -First 1
+        Get-ChildItem -Path $this.GetPSPath() | Where-Object { $_.NodeType -eq $FolderType } | Select-Object -First 1
     }
 
     [void] RunScriptOnHierarchy([string] $Path) {
